@@ -1,10 +1,8 @@
 import sys
 import time
 import threading
-import logging
 from TwitchChannelPointsMiner import TwitchChannelPointsMiner
 from TwitchChannelPointsMiner.classes.Settings import Priority, Settings
-from TwitchChannelPointsMiner.classes.Entities.Bet import Strategy
 
 # 1. Background timer to stop execution cleanly after 5.5 hours (19,800 seconds)
 def auto_stop():
@@ -19,11 +17,11 @@ threading.Thread(target=auto_stop, daemon=True).start()
 twitch_miner = TwitchChannelPointsMiner(
     username="computergeek619",
     claim_drops_startup=True,
-    enable_stream_predictions=False,  # Set to True if you want it to bet on predictions
+    enable_stream_predictions=False,
     settings=Settings(
         get_dark_theme=True,
-        log_file=False,               # Prints directly to GitHub Actions console logs
-        disable_graphics=True          # Saves memory on cloud servers
+        log_file=False,
+        disable_graphics=True
     )
 )
 
