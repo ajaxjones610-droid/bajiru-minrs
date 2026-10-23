@@ -15,9 +15,7 @@ threading.Thread(target=auto_stop, daemon=True).start()
 
 # 2. Configure Twitch Channel Points Miner
 twitch_miner = TwitchChannelPointsMiner(
-    username="computergeek619",
-    claim_drops_startup=True,
-    enable_stream_predictions=False
+    username="computergeek619"
 )
 
 # 3. Target Streamer Configuration
