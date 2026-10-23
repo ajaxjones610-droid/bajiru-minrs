@@ -2,7 +2,6 @@ import sys
 import time
 import threading
 from TwitchChannelPointsMiner import TwitchChannelPointsMiner
-from TwitchChannelPointsMiner.classes.Settings import Priority
 
 # 1. Background timer to stop execution cleanly after 5.5 hours (19,800 seconds)
 def auto_stop():
@@ -18,10 +17,10 @@ twitch_miner = TwitchChannelPointsMiner(
     username="computergeek619"
 )
 
-# 3. Target Streamer Configuration
+# 3. Target Streamer Configuration (Simple channel string list)
 twitch_miner.mine(
     [
-        ("bajiru_en", Priority.HIGH)
+        "bajiru_en"
     ],
     get_dark_theme=True
 )
