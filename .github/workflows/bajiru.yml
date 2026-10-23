@@ -1,11 +1,14 @@
 name: Run Bajiru Miner
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual run anytime
+  schedule:
+    - cron: '0 */6 * * *' # Automatically runs every 6 hours (4 times a day)
 
 jobs:
   run-miner:
     runs-on: ubuntu-latest
+    timeout-minutes: 340 # Safety cutoff at 5 hours 40 minutes
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
