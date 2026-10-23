@@ -17,10 +17,7 @@ twitch_miner = TwitchChannelPointsMiner(
     username="computergeek619"
 )
 
-# 3. Target Streamer Configuration (Simple channel string list)
+# 3. Start mining for bajiru_en
 twitch_miner.mine(
-    [
-        "bajiru_en"
-    ],
-    get_dark_theme=True
+    ["bajiru_en"]
 )
