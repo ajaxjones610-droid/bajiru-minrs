@@ -1,73 +1,27 @@
-import ssl
-import time
 import threading
-import logging
-import requests
-import urllib3
-
-# Suppress warnings
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-# Monkey-patch default requests headers to mimic a real Windows web browser
-original_session_init = requests.Session.__init__
-def custom_session_init(self, *args, **kwargs):
-    original_session_init(self, *args, **kwargs)
-    self.headers.update({
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Client-Id': 'kimne78kx3ncx6brogo4mv6wki5h1ko',
-    })
-requests.Session.__init__ = custom_session_init
-
+import time
+import sys
 from TwitchChannelPointsMiner import TwitchChannelPointsMiner
-from TwitchChannelPointsMiner.logger import LoggerSettings
 from TwitchChannelPointsMiner.classes.Settings import Priority
-from TwitchChannelPointsMiner.classes.entities.Streamer import Streamer, StreamerSettings
 
-RUN_DURATION = 5400  # 1.5 hours in seconds
+# 1. Function to auto-stop the script after 5.5 hours (19,800 seconds)
+def auto_stop():
+    time.sleep(19800)  # 5 hours and 30 minutes
+    print("Reached maximum 5.5-hour runtime limit. Shutting down cleanly...")
+    sys.exit(0)
 
-while True:
-    print('\n--- Starting Dedicated Bajiru Miner Session ---')
+# Start timer in background
+threading.Thread(target=auto_stop, daemon=True).start()
 
-    twitch_miner = TwitchChannelPointsMiner(
-        username="computergeek619",
-        password=None,  # Uses cookies/computergeek619.pkl
-        claim_drops_startup=True,
-        priority=[Priority.STREAK, Priority.DROPS, Priority.ORDER],
-        logger_settings=LoggerSettings(
-            save=True,
-            console_level=logging.INFO,
-            file_level=logging.DEBUG,
-        )
-    )
+# 2. Your standard miner setup
+twitch_miner = TwitchChannelPointsMiner(
+    username="computergeek619",
+    claim_drops_startup=True
+)
 
-    bajiru_settings = StreamerSettings(
-        make_predictions=False,
-        follow_raid=True,
-        claim_drops=True,
-        watch_streak=True,
-    )
-
-    twitch_miner.mine(
-        [
-            Streamer("bajiru_en", settings=bajiru_settings),
-        ]
-    )
-
-    def stop_session():
-        time.sleep(RUN_DURATION)
-        print('\n[Auto-Restart] 1.5 hours elapsed. Restarting Bajiru session...')
-        try:
-            twitch_miner.stop()
-        except AttributeError:
-            pass
-
-    timer_thread = threading.Thread(target=stop_session, daemon=True)
-    timer_thread.start()
-
-    try:
-        twitch_miner.run()
-    except Exception as e:
-        print(f"Bajiru session closed with error/restart: {e}")
-
-    time.sleep(5)
+twitch_miner.mine(
+    [
+        ("bajiru_en", Priority.HIGH)
+    ],
+    get_dark_theme=True
+)
