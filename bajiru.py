@@ -2,7 +2,7 @@ import sys
 import time
 import threading
 from TwitchChannelPointsMiner import TwitchChannelPointsMiner
-from TwitchChannelPointsMiner.classes.entities.Streamer import Streamer, StreamerSettings
+from TwitchChannelPointsMiner.classes.entities.Streamer import StreamerSettings
 
 # 1. Stop cleanly at 5 hours and 35 minutes (20,100 seconds) before GitHub's 6-hour cutoff
 def auto_stop():
@@ -24,4 +24,3 @@ twitch_miner = TwitchChannelPointsMiner(
 
 # 3. Mine bajiru_en
 twitch_miner.mine(["bajiru_en"])
-)
