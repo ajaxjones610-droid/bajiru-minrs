@@ -3,9 +3,10 @@ name: Run Bajiru Miner
 on:
   workflow_dispatch: # Allows manual trigger anytime
   schedule:
-    - cron: '0 */6 * * *' # Automatically runs every 6 hours
+    # Runs twice a day (e.g., at 6:00 PM UTC and 2:00 AM UTC, 
+    # which maps well to evening US Eastern times when streams start)
+    - cron: '0 18,2 * * *'
 
-# Prevents multiple instances from running at the same time and wasting actions minutes
 concurrency:
   group: bajiru-miner
   cancel-in-progress: true
